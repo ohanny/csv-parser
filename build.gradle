@@ -1,0 +1,44 @@
+plugins {
+    id 'antlr'
+}
+
+repositories {
+    mavenCentral()
+}
+
+group 'icodem'
+version '1.0-SNAPSHOT'
+description = 'CSV ANTLR4-based parser'
+
+dependencies {
+    antlr "org.antlr:antlr4:4.5.1"
+}
+
+generateGrammarSource {
+    group "${project.name}"
+    description 'Generates the parser code based on the grammar'
+
+    arguments += ["-visitor", "-Dlanguage=JavaScript"]
+
+    copy {
+        from 'build/generated-src/antlr/main'
+        into 'src/main/resources'
+        include '**/CSV*.js'
+        include '**/CSV*.tokens'
+    }
+}
+
+clean {
+    delete fileTree('src/main/resources') {
+        include '**/CSV*.js'
+        include '**/CSV*.tokens'
+    }
+}
+
+wrapper {
+    gradleVersion = '2.5'
+}
+
+
+
+
